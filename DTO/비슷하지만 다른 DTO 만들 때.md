@@ -66,38 +66,66 @@ super dto는 API 스펙을 분리할 수 없기 때문에 안 됨!!!!
 A를 상속받는 A1, A2, A3 클래스가 있으면
 B라는 클래스 만들어서 A에만 있는 속성, A1에만 있는 속성 이렇게 넣나요
 
+#### 킹지피티가 만들어준 코틀린 예제
 
-예제코드도 공유드리고 싶었는데.. 스크롤의 압박이 걱정되어 지피티 성님의 도움을 받았습니다.
+~~~ kotlin
+// 상속을 사용한 예시
+open class UserDto(
+    val id: Long,
+    val name: String
+)
 
-ㅁ
+class ExtendedUserDto(
+    id: Long,
+    name: String,
+    val email: String
+) : UserDto(id, name)
+~~~
 
--> Request 객체를 저렇게는 안 써봤던 거 같은데
+~~~ kotlin
+// 컴포지션을 사용한 예시
+data class UserDto(
+    val id: Long,
+    val name: String
+)
+
+data class ExtendedUserDto(
+    val user: UserDto,
+    val email: String
+)
+~~~
+> 위 예시에서는 ExtendedUserDto가 UserDto를 상속하는 대신, UserDto 타입의 user 프로퍼티를 갖도록 함으로써 컴포지션을 사용하였습니다. 이 방식을 사용하면 ExtendedUserDto가 UserDto의 내부 구현에 의존하지 않아도 되므로, 두 클래스가 더 독립적이고 유연하게 됩니다.
+
+
+-> Request 객체를 저렇게는 안 써봤던 거 같은뎀...
 
 코틀린에서.. 
 {
   val somethings: List<Something>
 }
 
-구조에서 컬렉션 하위 Something에 대한 validation이 불가능해서 커스텀 밸리데이터 만들어야해요.
+구조에서 컬렉션 하위 Something에 대한 validation이 불가능해서 커스텀 밸리데이터 만들어야 함!
 
 안에 데이터 클래스를 정의해서 마커 처럼 사용하기도 함
 
 seald interface usercommand{
-val id: long
-data class userrrigsercommand(
-override val id : long
-val name : string) : usercommand
+ 
+ val id: long
+ 
+ data class rigsercommand(
+ override val id : long
+ val name : string) : usercommand
 }
 
 @field:Valid 로 했던거 같은데.. 음? -> 컬렉션에서 안먹혀
 
-저는 요즘 각 매핑을 별도의 RestController로 추출하고 Request/Response 타입을 컨트롤러 내부에 inner class로 정의해서 저런 고민을 안하고 있네요 ㅋㅋ
+나는 요즘 각 매핑을 별도의 RestController로 추출하고 Request/Response 타입을 컨트롤러 내부에 inner class로 정의해서 저런 고민을 안했디
 
-그리고 @NotNull같은거도 어노테이션 적용하려면 프로파티 nullable로 둬야 메시지 적용되어서 좀 지저분하져
+그리고 @NotNull같은거도 어노테이션 적용하려면 프로파티 nullable로 둬야 메시지 적용되어서 좀 지저분 함..
 
 그냥 모든 Mapping이 별도 컨트롤러이고 그 컨트롤러의 내부에 해당 매핑을 위한 req, res 객체가 들어가는 구조입니당
 
 
 알아서 내부 객체 필드 맵핑 잘 해줌! 저정도는 그냥 해줍니다. 컬렉션만 아니면 @field:Valid 붙이면 검증도 해주고요
 
-컬렉션은 별도 밸리데이터 + 어노테이션 만글어서 손수 작업 해야합니다
+컬렉션은 별도 밸리데이터 + 어노테이션 맹글어 손수 작업 해야합니다 ~~
